@@ -18,7 +18,7 @@
       replace: true,
       template: '<td class="cell">{{content}}</td>',
       link: linkFn
-    }
+    };
   });
 
   app.directive('row', function() {
@@ -52,7 +52,7 @@
         for (col = 0; col < scope.size; col++) {
           scope.brd[row][col] = {
             value: null
-          }
+          };
         }
       }
     };

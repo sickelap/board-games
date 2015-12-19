@@ -1,0 +1,6 @@
+{
+  "noempty": true,
+  "globals": {
+    "angular": true
+  }
+}
