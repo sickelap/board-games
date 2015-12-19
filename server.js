@@ -2,9 +2,9 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var game = require('./game')(io);
+require('./game')(io);
 
-app.use(express.static('public'));
+app.use('/', express.static(__dirname + '/public'));
 
 server.listen(3000);
 
