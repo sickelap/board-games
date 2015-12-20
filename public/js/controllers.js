@@ -2,7 +2,7 @@ app.controller('GameController', ['$state', '$stateParams', 'gameService', funct
   this.player = game.getPlayer();
 
   if (!this.player) {
-    state.go('enter');
+    state.go('home');
   }
 
   this.game = game.getGame(params.id).then(function(gameConfig) {
@@ -25,7 +25,7 @@ app.controller('LobbyController', ['$state', 'gameService', function(state, game
   this.gameSize = 3;
 
   if (!this.player) {
-    state.go('enter');
+    state.go('home');
   }
 
   this.onPlayGame = function() {
