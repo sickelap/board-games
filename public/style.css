@@ -1,0 +1,19 @@
+.ng-cloak {
+    display: none !important;
+}
+.cell {
+  height: 100px;
+  width: 100px;
+  background: #EEE;
+  border: solid 1px #AAA;
+}
+.cell:hover {
+  background: #FFF;
+  border: solid 1px #555;
+  cursor: pointer;
+}
+.cell.used,.cell.used:hover {
+  background: #AAA;
+  border: solid 1px #AAA;
+  cursor: default;
+}
