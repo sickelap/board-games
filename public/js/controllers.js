@@ -31,13 +31,13 @@ app.controller('LobbyController', ['$state', 'gameService', function(state, game
   this.onPlayGame = function() {
     game.createOrJoin().then(function(id) {
       state.go('game', {id: id});
-    }).catch(function(error) {
-      state.go('error', {error: error});
     });
   };
 
   this.onCreateGame = function() {
-    game.createGame(this.gameSize).then(function(id) {
+    var size = (this.gameSize > 10 || this.gameSize < 3) ? 3 : this.gameSize;
+
+    game.createGame(size).then(function(id) {
       state.go('game', {id: id});
     });
   };
@@ -47,6 +47,14 @@ app.controller('LobbyController', ['$state', 'gameService', function(state, game
       state.go('game', {id: id});
     });
   };
+
+  game.on('join', function(id) {
+    state.go('game', {id: id});
+  });
+
+  game.on('error', function(error) {
+    state.go('error', {error: error});
+  });
 }]);
 
 app.controller('HomeController', ['$state', 'gameService', function(state, game) {

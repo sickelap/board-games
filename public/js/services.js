@@ -16,6 +16,8 @@ app.factory('errorService', [function() {
 }]);
 
 app.factory('gameService', ['$q', function(Q) {
+  this.listeners = {};
+
   function setPlayer(player) {
     if (!player.name) {
       player.name = 'Anonymous Coward';
@@ -76,7 +78,15 @@ app.factory('gameService', ['$q', function(Q) {
     return board;
   }
 
+  function on(event, callback, context) {
+    this.listeners[event] = {
+      callback: callback,
+      context: context || this
+    };
+  }
+
   return {
+    on: on,
     createBoard: createBoard,
     setPlayer: setPlayer,
     getPlayer: getPlayer,
