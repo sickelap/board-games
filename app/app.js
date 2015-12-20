@@ -9,7 +9,9 @@
 
   app.directive('cell', function() {
     var linkFn = function(scope, el) {
-
+      el.on('click', function() {
+        console.log(scope.c);
+      });
     };
 
     return {
@@ -51,7 +53,9 @@
         }
         for (col = 0; col < scope.size; col++) {
           scope.brd[row][col] = {
-            value: null
+            value: null,
+            x: col,
+            y: row
           };
         }
       }
