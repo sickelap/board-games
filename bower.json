@@ -1,0 +1,21 @@
+{
+  "name": "tic-tac-toe",
+  "version": "0.0.0",
+  "authors": [
+    "Genadijus Paleckis <genadijus.paleckis@gamesys.co.uk>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-ui-router": "ui-router#~0.2.15",
+    "bootstrap": "~3.3.6",
+    "angular-socket-io": "~0.7.0"
+  }
+}

@@ -1,0 +1,11 @@
+<h1>L</h1>
+
+<button data-ng-click="lobby.createGame()">Create</button>
+<button data-ng-click="lobby.listGames()">List</button>
+<ul>
+  <li data-ng-repeat="game in lobby.games">
+    {{game.size}}x{{game.size}}: {{game.state}}
+    [<a data-ng-click="lobby.leaveGame(game)">leave</a>]
+  </li>
+</ul>
+
