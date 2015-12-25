@@ -1,5 +1,7 @@
-/* global describe, beforeEach, afterEach, it, expect */
 'use strict';
+
+process.env.APP_PORT = 3001;
+process.env.NODE_ENV = 'test';
 
 var io = require('socket.io-client');
 
@@ -11,7 +13,6 @@ var socketOptions = {
 
 describe('game server', function() {
   beforeEach(function() {
-    process.env.PORT = 3001;
     this.app = require('../../server/app');
   });
   afterEach(function() {

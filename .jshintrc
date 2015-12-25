@@ -1,6 +1,9 @@
 {
+  "esnext": true,
   "node": true,
+  "jasmine": true,
   "globals": {
-    "angular": true
+    "angular": true,
+    "jasmine": true
   }
 }

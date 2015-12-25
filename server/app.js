@@ -9,5 +9,5 @@ module.exports = (function() {
 
   app.use('/', express.static(__dirname + '/../client'));
 
-  return server.listen(process.env.PORT || 3000);
+  return server.listen(process.env.APP_PORT || 3000);
 })();
