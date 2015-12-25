@@ -31,10 +31,10 @@ GameEngine.prototype.sendGameDetails = function(gameId) {
   this.socket.emit('game:get', game);
 };
 
-GameEngine.prototype.createGame = function() {
+GameEngine.prototype.createGame = function(cb) {
   var game = this.store.createGame();
 
-  this.socket.emit('game:create', game);
+  cb('vienas');
 };
 
 GameEngine.prototype.joinGame = function(gameId, playerId) {

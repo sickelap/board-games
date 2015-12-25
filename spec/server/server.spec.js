@@ -5,30 +5,43 @@ process.env.NODE_ENV = 'test';
 
 var io = require('socket.io-client');
 
-var socketUrl = 'http://localhost:3001';
-var socketOptions = {
-  transports: ['websocket'],
-  'force new connection': true
-};
+function createClient() {
+  var url = 'http://localhost:3001';
+  var options = {
+    transports: ['websocket'],
+    'force new connection': true
+  };
+
+  return io.connect(url, options);
+}
 
 describe('game server', function() {
-  beforeEach(function() {
+  beforeAll(function() {
     this.app = require('../../server/app');
   });
-  afterEach(function() {
+  afterAll(function() {
     this.app.close();
   });
 
   it('should respond to PING with PONG', function(done) {
-    var client = io.connect(socketUrl, socketOptions);
+    var client = createClient();
+
     client.on('connect', function() {
-      client.on('test:reply', function(response) {
-        expect(response).toBe('check');
+      client.emit('PING', function(response) {
+        expect(response).toBe('PONG');
         done();
       });
-      client.emit('test:request');
     });
   });
 
-  it('pending spec');
+  it('should create game when message "game:create" is sent', function(done) {
+    var client = createClient();
+
+    client.on('connect', function() {
+      client.emit('game:create', function(response) {
+        expect(response).toBe('vienas');
+        done();
+      });
+    });
+  });
 });
