@@ -23,6 +23,8 @@ var GameModel = Backbone.Model.extend({
     if (!this._canAddPlayer()) {
       return false;
     }
+    
+    var players = this.get('players');
 
     players.push(playerId);
 
@@ -83,31 +85,31 @@ var GameModel = Backbone.Model.extend({
     }
   },
 
-  _isWinner: function(player, lastMove) {
-    var checkTable = [
-      [[1, 2], [4, 8], [3, 6]],
-      [[0, 2], [4, 7]],
-      [[0, 1], [4, 6], [5, 8]],
-      [[4, 5], [0, 6]],
-      [[3, 5], [0, 8], [2, 6], [1, 7]],
-      [[3, 4], [2, 8]],
-      [[7, 8], [2, 4], [0, 3]],
-      [[6, 8], [1, 4]],
-      [[6, 7], [0, 4], [2, 5]]
-    ];
-    var lastMoveIndex = lastMove.x + lastMove.y * 3;
-
-    var board = this.get('board');
-    for (var i = 0; i < winLines[lastMove].length; i++) {
-      var line = winLines[lastMove][i];
-      var y1 = parseInt(line[0] / 3, 10);
-      var x1 = line[0] % 3;
-      var y2 = parseInt(line[1] / 3, 10);
-      var x2 = line[1] % 3;
-      if (player === board[x1][y1] && player === board[x2][y2]) {
-        return true;
-      }
-    }
+  _isWinner: function(/*player, lastMove*/) {
+//    var checkTable = [
+//      [[1, 2], [4, 8], [3, 6]],
+//      [[0, 2], [4, 7]],
+//      [[0, 1], [4, 6], [5, 8]],
+//      [[4, 5], [0, 6]],
+//      [[3, 5], [0, 8], [2, 6], [1, 7]],
+//      [[3, 4], [2, 8]],
+//      [[7, 8], [2, 4], [0, 3]],
+//      [[6, 8], [1, 4]],
+//      [[6, 7], [0, 4], [2, 5]]
+//    ];
+//    var lastMoveIndex = lastMove.x + lastMove.y * 3;
+//
+//    var board = this.get('board');
+//    for (var i = 0; i < winLines[lastMove].length; i++) {
+//      var line = winLines[lastMove][i];
+//      var y1 = parseInt(line[0] / 3, 10);
+//      var x1 = line[0] % 3;
+//      var y2 = parseInt(line[1] / 3, 10);
+//      var x2 = line[1] % 3;
+//      if (player === board[x1][y1] && player === board[x2][y2]) {
+//        return true;
+//      }
+//    }
     return false;
   }
 });

@@ -8,7 +8,7 @@ function GameEngine(socket, store) {
 GameEngine.prototype.broadcastGameList = function() {
   var games = this.store.toJSON();
 
-  this.socket.broadcast('game:update', games);
+  this.socket.emit('game:update', games);
 };
 
 GameEngine.prototype.sendGameList = function(playerId) {
@@ -26,7 +26,7 @@ GameEngine.prototype.sendGameList = function(playerId) {
 };
 
 GameEngine.prototype.sendGameDetails = function(gameId) {
-  var game = this.store.find(id);
+  var game = this.store.find(gameId);
   
   this.socket.emit('game:get', game);
 };
@@ -66,3 +66,4 @@ GameEngine.prototype.makeMove = function(gameId, playerId, action) {
   this.socket.emit('game:move', result);
 };
 
+module.exports = GameEngine;
