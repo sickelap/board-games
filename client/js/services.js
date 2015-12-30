@@ -4,16 +4,16 @@ app.factory('connection', ['socketFactory', function(socketFactory) {
 
 app.factory('gameService', ['$q', '$location', 'connection', function(Q, $location, conn) {
   var listeners = {};
-  var query = $location.search();
-  var playerId = (query.playerId) ? query.playerId : null;
-  
-  if (!playerId) {
-    throw new Error('add ?playerId=<number> url parameter');
-  }
-
-  function getPlayerId() {
-    return playerId;
-  }
+  //  var query = $location.search();
+  //  var playerId = (query.playerId) ? query.playerId : null;
+  //  
+  //  if (!playerId) {
+  //    throw new Error('add ?playerId=<number> url parameter');
+  //  }
+  //
+  //  function getPlayerId() {
+  //    return playerId;
+  //  }
 
   function createBoard(size) {
     var row, col, board = [];
@@ -50,11 +50,9 @@ app.factory('gameService', ['$q', '$location', 'connection', function(Q, $locati
 
   function request(event, data) {
     return Q(function(resolve) {
-      conn.addListener(event, function(data) {
-        resolve(data);
-        conn.removeAllListeners(event);
+      conn.emit(event, data, function(response) {
+        resolve(response);
       });
-      conn.emit(event, data);
     });
   }
 
@@ -63,8 +61,7 @@ app.factory('gameService', ['$q', '$location', 'connection', function(Q, $locati
     off: off,
     trigger: trigger,
     request: request,
-    getPlayerId: getPlayerId,
+    //    getPlayerId: getPlayerId,
     createBoard: createBoard
   };
 }]);
-

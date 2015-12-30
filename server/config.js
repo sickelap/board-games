@@ -1,15 +1,14 @@
 'use strict';
 
+var MemoryStore = require('./store/MemoryStore');
+var TicTacToe = require('./engine/TicTacToe');
+
 module.exports = {
   getEngine: function() {
-    return new require('./engine/TicTacToe');
+    return new TicTacToe();
   },
 
   getStore: function() {
-    if (process.env.NODE_ENV === 'production') {
-      return new require('./store/MongoStore');
-    }
-
-    return new require('./store/MemoryStore');
+    return new MemoryStore();
   }
 };

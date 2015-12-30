@@ -4,7 +4,6 @@ process.env.APP_PORT = 3001;
 process.env.NODE_ENV = 'test';
 
 var io = require('socket.io-client');
-var server = require('../../server/app');
 
 function createClient() {
   var url = 'http://localhost:3001';
@@ -17,30 +16,38 @@ function createClient() {
 }
 
 describe('game server', function() {
+  var server;
+
   beforeAll(function() {
-    server.start();
+    server = require('../../server/app');
   });
   afterAll(function() {
-    server.stop();
+    server.close();
   });
 
   it('should respond to PING with PONG', function(done) {
     var client = createClient();
 
     client.on('connect', function() {
-      client.emit('PING', function(response) {
-        expect(response).toBe('PONG');
+      client.emit('ping', function(response) {
+        expect(response).toBe('pong');
         done();
       });
     });
   });
 
-  it('should create game when message "game:create" is sent', function(done) {
+  it('should create game when message "create" is sent', function(done) {
     var client = createClient();
 
     client.on('connect', function() {
-      client.emit('game:create', function(response) {
-        expect(response).toEqual([]);
+      var params = {
+        public: true,
+        playerId: 1
+      };
+      client.emit('create', params, function(response) {
+        expect(response.players).toEqual([1]);
+        expect(response.state).toBe('NEW');
+        expect(response.public).toBe(true);
         done();
       });
     });

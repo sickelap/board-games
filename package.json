@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "server": "node server/app",
+    "server": "node server/app --harmony",
     "watch": "gulp watch",
     "postinstall": "bower install",
     "start": "concurrent \"npm run server\" \"npm run watch\""

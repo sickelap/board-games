@@ -1,31 +1,41 @@
-app.controller('GameController', ['$state', '$stateParams', 'gameService', function(state, params, game) {
+app.controller('LobbyController', ['connection', '$location', function(connection, $location) {
   var self = this;
-}]);
-
-app.controller('LobbyController', ['$state', 'gameService', function(state, game) {
-  var self = this;
-  var player = {playerId: game.getPlayerId()};
+  var query = $location.search();
+  var playerId = (query.playerId) ? parseInt(query.playerId, 10) : 100;
 
   this.createGame = function() {
-    game.request('game:create', player).then(function(game) {
+    connection.emit('create', function(game) {
       console.log(game);
     });
   };
 
+  this.listGames = function() {
+    connection.emit('list', function(games) {
+      self.games = games;
+    });
+  };
+
   this.joinGame = function(game) {
-
+    connection.emit('join', {gameId: game._id, playerId: playerId}, function(game) {
+      console.log(game);
+    });
   };
 
-  this.leaveGame = function(data) {
-    game.request('game:leave', {game: data.id, player: player});
+  this.playGame = function(game) {
+    connection.emit('play', {playerId: playerId}, function(game) {
+      console.log(game);
+    });
   };
 
-  game.on('games:updated', function(games) {
-    console.log(games);
-    self.games = games;
-  });
+  this.leaveGame = function(game) {
+    connection.emit('leave', {gameId: game._id, playerId: playerId}, function(game) {
+      console.log(game);
+    });
+  };
 
-  game.request('game:list', player).then(function(games) {
+  this.listGames();
+
+  connection.on('list:updated', function(games) {
     self.games = games;
   });
 }]);

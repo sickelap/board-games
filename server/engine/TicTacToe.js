@@ -2,12 +2,14 @@
 
 var _ = require('lodash');
 
-function Engine() {}
+function Engine() {
+  this.games = [];
+}
 
 Engine.fn = Engine.prototype;
 
 Engine.fn.setSocket = function(socket) {
-  this.socket = socket;
+  this.io = socket;
 };
 
 Engine.fn.setStore = function(store) {
@@ -15,7 +17,7 @@ Engine.fn.setStore = function(store) {
 };
 
 Engine.fn.start = function() {
-  this.socket.on('connection', _.bind(this._onConnect, this));
+  this.io.on('connection', _.bind(this._onConnect, this));
 };
 
 Engine.fn.stop = function() {
@@ -26,94 +28,80 @@ Engine.fn.stop = function() {
  * Initialize wiring
  */
 Engine.fn._onConnect = function(connection) {
-  this.connection.on('list', _.bind(this._getGamesList, this));
+  connection.on('ping', this._ping.bind(this));
+  connection.on('list', this._listGames.bind(this));
+  connection.on('create', this._createGame.bind(this));
+  connection.on('join', this._joinGame.bind(this));
+  connection.on('leave', this._leaveGame.bind(this));
+  connection.on('play', this._playGame.bind(this));
+  connection.on('move', this._makeMove.bind(this));
+
+  this._broadcastGameList();
 };
 
-/**
- * Return list og all games in the store
- *
- * @param cb callback to be called with result
- */
-Engine.fn._getGamesList = function(cb) {
-  cb(this.store.findAllGames());
+Engine.fn._ping = function(callback) {
+  callback('pong');
 };
 
-/**
- * Create new game in the store and return it
- *
- * @param cb callback to be called with result
- */
-Engine.fn._createGame = function(cb) {
-  var game = this.store.add({
-    players: [],
-    state: 'INITIAL', // READY, RUNNING, ENDED
-    board: this._getPristineBoard(),
-    stones: {
-      'X': null,
-      'O': null
-    }
+Engine.fn._listGames = function(callback) {
+  callback(this.games);
+};
+
+Engine.fn._createGame = function(data, callback) {
+  var game = {
+    _id: Date.now() + Math.random() + '',
+    players: [data.playerId],
+    state: 'NEW',
+    public: !!data.public
+  };
+
+  this.games.push(game);
+  this._broadcastGameList();
+
+  callback(game);
+};
+
+Engine.fn._joinGame = function(data, callback) {
+  var game = _.findWhere(this.games, {
+    _id: data.gameId
   });
+  if (!game) {
+    callback(null);
+  }
 
-  cb(game);
+  if (game.players.indexOf(data.playerId) === -1) {
+    game.players.push(data.playerId);
+    this._broadcastGameList();
+  }
+
+  callback(game);
 };
 
-/**
- * @param gameId game ID
- * @param playerId player ID
- * @param callback callback to be called with game object or error
- */
-Engine.fn._joinGame = function(gameId, playerId, callback) {
-  var store = this.store;
+Engine.fn._leaveGame = function(data, callback) {
+  var game = _.findWhere(this.games, {_id: data.gameId});
+  if (!game) {
+    return callback(false);
+  }
 
-  var checkIfPlayerCanJoin = function(game) {
-    return new Promise(function(resolve, reject) {
-      if (game.players.length === 2) {
-        reject('game is full');
-      }
-      if (game.players.indexOf(playerId) !== -1) {
-        reject('player already in the game');
-      }
+  var playerIdx = game.players.indexOf(data.playerId);
+  if (playerIdx !== -1) {
+    game.players.splice(playerIdx, 1);
+    this._broadcastGameList();
+  }
 
-      resolve(game); // pass-thru
-    });
-  };
-
-  var addPlayer = function(game) {
-    return new Promise(function(resolve) {
-      var stones = _.filter(game.stones, function(stone) {
-        return game.stones[stone] === null;
-      });
-      var stone = stones[Math.random(Math.floor() * stones.length)];
-      game.players.push(playerId); // add player
-      game.stones[stone] = playerId; // assign random stone to a player
-      resolve(game);
-    });
-  };
-
-  this.findGameById(gameId)
-    .then(checkIfPlayerCanJoin)
-    .then(addPlayer)
-    .then(store.save)
-    .then(callback)
-    .catch(function(error) {
-      callback({
-        error: error
-      });
-    });
+  callback(true);
 };
 
-/**
- * Remove player from the players list and mar game as ended
- */
-Engine.fn._leaveGame = function(gameId, playerId, callback) {
-  this.store.findGameById(gameId);
+Engine.fn._playGame = function(data, callback) {
+  callback();
 };
 
-/**
- * Return array representing empty game board
- */
-Engine.fn._getPristineBoard = function() {
-  return ['', '', '', '', '', '', '', '', ''];
+Engine.fn._makeMove = function(data, callback) {
+  callback();
+};
+
+Engine.fn._broadcastGameList = function() {
+  this.io.sockets.emit('list:updated', this.games);
 };
 
 module.exports = Engine;
