@@ -4,10 +4,26 @@ module.exports = (function() {
   var express = require('express');
   var app = express();
   var server = require('http').Server(app);
-  var io = require('socket.io')(server);
-  require('./GameController')(io);
+  var socket = require('socket.io')(server);
+  var config = require('./config');
 
   app.use('/', express.static(__dirname + '/../client'));
 
-  return server.listen(process.env.APP_PORT || 3000);
+  return {
+    start: function() {
+      var store = config.getStore();
+      var engine = config.getEngine();
+
+      engine.setSocket(socket);
+      engine.setStore(store);
+      engine.start();
+
+      server.listen(process.env.APP_PORT || 3000);
+    },
+
+    stop: function() {
+      engine.stop();
+      server.close();
+    }
+  };
 })();

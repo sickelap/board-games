@@ -4,6 +4,7 @@ process.env.APP_PORT = 3001;
 process.env.NODE_ENV = 'test';
 
 var io = require('socket.io-client');
+var server = require('../../server/app');
 
 function createClient() {
   var url = 'http://localhost:3001';
@@ -17,10 +18,10 @@ function createClient() {
 
 describe('game server', function() {
   beforeAll(function() {
-    this.app = require('../../server/app');
+    server.start();
   });
   afterAll(function() {
-    this.app.close();
+    server.stop();
   });
 
   it('should respond to PING with PONG', function(done) {
@@ -39,7 +40,7 @@ describe('game server', function() {
 
     client.on('connect', function() {
       client.emit('game:create', function(response) {
-        expect(response).toBe('vienas');
+        expect(response).toEqual([]);
         done();
       });
     });
