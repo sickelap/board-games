@@ -1,42 +1,66 @@
-app.controller('LobbyController', ['connection', '$location', function(connection, $location) {
+app.controller('LobbyController', ['$state', 'connection', function($state, socket) {
   var self = this;
-  var query = $location.search();
-  var playerId = (query.playerId) ? parseInt(query.playerId, 10) : 100;
+  var playerId = parseInt($state.params.playerId, 10);
 
-  this.createGame = function() {
-    connection.emit('create', function(game) {
-      console.log(game);
-    });
-  };
-
-  this.listGames = function() {
-    connection.emit('list', function(games) {
-      self.games = games;
+  this.playGame = function(game) {
+    socket.emit('play', {
+      playerId: playerId
+    }, function(game) {
+      if (game._id) {
+        $state.go('game', {
+          playerId: playerId,
+          gameId: game._id
+        });
+      }
     });
   };
 
   this.joinGame = function(game) {
-    connection.emit('join', {gameId: game._id, playerId: playerId}, function(game) {
-      console.log(game);
+    socket.emit('play', {
+      _id: game._id,
+      playerId: playerId
+    }, function(game) {
+      if (game._id) {
+        $state.go('game', {
+          playerId: playerId,
+          gameId: game._id
+        });
+      }
     });
   };
 
-  this.playGame = function(game) {
-    connection.emit('play', {playerId: playerId}, function(game) {
-      console.log(game);
-    });
-  };
-
-  this.leaveGame = function(game) {
-    connection.emit('leave', {gameId: game._id, playerId: playerId}, function(game) {
-      console.log(game);
-    });
-  };
-
-  this.listGames();
-
-  connection.on('list:updated', function(games) {
+  socket.on('list:updated', function(games) {
     self.games = games;
   });
 }]);
 
+app.controller('GameController', ['$state', 'connection', function($state, socket) {
+  var playerId = parseInt($state.params.playerId, 10);
+  var gameId = $state.params.gameId;
+
+  this.leave = function() {
+    socket.emit('leave', {
+      _id: gameId,
+      playerId: playerId
+    }, function() {
+      $state.go('lobby', {
+        playerId: playerId
+      });
+    });
+  };
+
+  this.ready = function() {
+    socket.emit('ready', {
+      _id: gameId,
+      playerId: playerId
+    }, function(response) {
+      console.log(response);
+    });
+  };
+
+  this.move = function() {
+    socket.emit('move', {
+
+    });
+  };
+}]);

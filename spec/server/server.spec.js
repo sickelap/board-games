@@ -5,6 +5,8 @@ process.env.NODE_ENV = 'test';
 
 var io = require('socket.io-client');
 
+var BoardInterface = require('../../server/engine/BoardInterface');
+
 function createClient() {
   var url = 'http://localhost:3001';
   var options = {
@@ -36,7 +38,7 @@ describe('game server', function() {
     });
   });
 
-  it('should create game when message "create" is sent', function(done) {
+  xit('should create game when message "create" is sent', function(done) {
     var client = createClient();
 
     client.on('connect', function() {
@@ -50,6 +52,21 @@ describe('game server', function() {
         expect(response.public).toBe(true);
         done();
       });
+    });
+  });
+
+  it('should create new game when client send play game event', () => {
+    var client = createClient();
+
+    client.on('connect', function() {
+      var playParams= {
+
+      };
+      var playCallback = function(response) {
+        expect(response.board instanceof BoardInterface).toBeTrue();
+      };
+
+      client.emit('play', playParams, playCallback);
     });
   });
 });
