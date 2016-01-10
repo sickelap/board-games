@@ -1,0 +1,21 @@
+{
+  "name": "multi-board-game",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "tsc": "tsc -d",
+    "tsc:w": "tsc -w",
+    "server": "node server/app",
+    "clean": "find server -type f \\( -iname *.js -o -iname *.map -o -iname *.d.ts \\) | xargs rm",
+    "start": "concurrent \"npm run tsc:w\" \"npm run server\""
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "socket.io": "^1.4.3"
+  },
+  "devDependencies": {
+    "concurrently": "^1.0.0",
+    "typescript": "^1.7.5"
+  }
+}
