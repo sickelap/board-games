@@ -8,7 +8,7 @@ var ts = require('gulp-typescript');
 var tsconfig = require('./tsconfig.json');
 var gls = require('gulp-live-server');
 
-gulp.task('default', ['build', 'serve']);
+gulp.task('default', ['build', 'watch', 'serve']);
 
 gulp.task('serve', function() {
   var server = gls.new('server/app');
@@ -42,16 +42,16 @@ gulp.task('serverTS', function() {
     .pipe(gulp.dest('server'));
 });
 
-//gulp.task('watch', function(done) {
-//  return runSequence([
-//    'clientTS:watch', 'serverTS:watch'
-//  ], done);
-//});
-//
-//gulp.task('clientTS:watch', function() {
-//  return gulp.watch('src/client/**/*.ts', ['clientTS']);
-//});
-//
-//gulp.task('serverTS:watch', function() {
-//  return gulp.watch('src/server/**/*.ts', ['serverTS']);
-//});
+gulp.task('watch', function(done) {
+  return runSequence([
+    'clientTS:watch', 'serverTS:watch'
+  ], done);
+});
+
+gulp.task('clientTS:watch', function() {
+  return gulp.watch('src/client/**/*.ts', ['clientTS']);
+});
+
+gulp.task('serverTS:watch', function() {
+  return gulp.watch('src/server/**/*.ts', ['serverTS']);
+});
