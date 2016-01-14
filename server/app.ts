@@ -1,3 +1,4 @@
+/// <reference path="../typings/tsd.d.ts" />
 import * as express from 'express';
 import * as socketio from 'socket.io';
 import * as http from 'http';
