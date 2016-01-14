@@ -6,14 +6,19 @@ var ts = require('gulp-typescript');
 //var rename = require("gulp-rename");
 //var browserSync = require('browser-sync').create();
 var tsconfig = require('./tsconfig.json');
+var gls = require('gulp-live-server');
 
-gulp.task('default', ['build']);
+gulp.task('default', ['build', 'serve']);
 
 gulp.task('serve', function() {
-  browserSync.init({
-    server: {
-      baseDir: "./client"
-    }
+  var server = gls.new('server/app');
+  server.start();
+
+  gulp.watch(['client/**/*.css', 'client/**/*.html', 'client/**/*.js'], function(file) {
+    server.notify.apply(server, [file]);
+  });
+  gulp.watch('server/**/*.js', function() {
+    server.start.bind(server)();
   });
 });
 
