@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "postinstall": "node_modules/.bin/tsd install"
+  },
   "dependencies": {
     "angular2": "2.0.0-beta.1",
     "es6-promise": "^3.0.2",
