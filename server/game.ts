@@ -1,17 +1,10 @@
-/// <reference path="../typings/tsd.d.ts" />
-
 import * as _ from 'lodash';
 import {Player} from './player';
 import {TicTacToe} from './boards/TicTacToe';
 
 export interface Action {
-  // actor
   playerId: number;
-
-  // item
   stone: string;
-
-  // move positions
   x: number;
   y: number;
 }
@@ -30,11 +23,14 @@ export enum GameType {
 
 export interface Board {
   players: Array<Player>;
-  isValidAction(a: Action): boolean;
+  isConfigured: boolean;
+
   makeMove(a: Action): void;
   getContent(): any;
-  hasWinner(): boolean;
-  getWinner(): any;
+  getWinner(): Player;
+  addPlayer(p: Player): void;
+  allPlayersJoined(): boolean;
+  configure(): void;
 }
 
 export class Game {
@@ -47,12 +43,8 @@ export class Game {
     this.board = this.createBoard(gameType);
   }
 
-  hasWinner(): boolean {
-    return false;
-  }
-
-  getWiner(): Player {
-    return null;
+  getWinner(): Player {
+    return this.board.getWinner();
   }
 
   getBoard(): Board {
@@ -60,7 +52,15 @@ export class Game {
   }
 
   addPlayer(player: Player): void {
+    if (this.state !== GameState.NEW) {
+      return;
+    }
 
+    this.board.addPlayer(player);
+
+    if (this.board.allPlayersJoined()) {
+      this.state = GameState.RUNNING;
+    }
   }
 
   private createBoard(gameType: GameType): Board {

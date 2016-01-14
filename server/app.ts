@@ -8,6 +8,7 @@ var server = http.createServer(app);
 var connection = socketio(server);
 var gameServer = new GameServer(connection);
 
+app.use('/node_modules', express.static(__dirname + '/../node_modules'));
 app.use('/', express.static(__dirname + '/../client'));
 
 server.listen(3000);

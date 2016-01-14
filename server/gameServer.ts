@@ -1,5 +1,5 @@
 import {Player, PlayerList} from './player';
-import {Game, GameList, GameType, Action} from './game';
+import {Game, GameList, GameType, Action, Board} from './game';
 
 export interface PlayGameParams {
   player: Player;
@@ -46,10 +46,16 @@ export class GameServer {
     callback(game);
   }
 
+  public configureAction(board: Board, callback: GameCallback): void {
+    var game: Game;
+    callback(game);
+  }
+
   private onClientConnect(socket: SocketIO.Socket): void {
+    socket.on('configure', this.configureAction);
     socket.on('play', this.playAction);
-    socket.on('leave', this.leaveAction);
     socket.on('move', this.moveAction);
+    socket.on('leave', this.leaveAction);
     this.broadcastGameList();
   }
 

@@ -1,7 +1,13 @@
-node_modules
 npm-debug.log
 
-*.js
-*.js.map
-*.d.ts
+node_modules
+typings
+
+server/**/*.js
+server/**/*.js.map
+server/**/*.d.ts
+client/**/*.js
+client/**/*.js.map
+client/**/*.d.ts
+
 !*.spec.js
