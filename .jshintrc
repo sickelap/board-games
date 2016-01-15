@@ -1,3 +1,4 @@
 {
+  "jasmine": true,
   "node": true
 }

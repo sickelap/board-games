@@ -1,11 +1,19 @@
+/* globals jasmine:true */
+
 var gulp = require('gulp');
-//var watch = require('gulp-watch');
 var runSequence = require('run-sequence');
 var ts = require('gulp-typescript');
 var tsconfig = require('./tsconfig.json');
 var gls = require('gulp-live-server');
+var jasmine = require('gulp-jasmine');
 
-gulp.task('default', ['build', 'watch', 'serve']);
+gulp.task('default', function(done) {
+  runSequence(['build', 'test', 'watch', 'serve'], done);
+});
+
+gulp.task('test', function() {
+  return gulp.src('spec/**/*.spec.js').pipe(jasmine());
+});
 
 gulp.task('serve', function() {
   var server = gls.new('server/app');
@@ -50,8 +58,12 @@ gulp.task('serverTS', function() {
 
 gulp.task('watch', function(done) {
   return runSequence([
-    'clientTS:watch', 'serverTS:watch'
+    'clientTS:watch', 'serverTS:watch', 'test:watch'
   ], done);
+});
+
+gulp.task('test:watch', function() {
+  return gulp.watch('spec/**/*.spec.js', ['test']);
 });
 
 gulp.task('clientTS:watch', function() {
