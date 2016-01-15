@@ -15,7 +15,7 @@ function createClient() {
   return io.connect(url, options);
 }
 
-describe('game server', function() {
+xdescribe('game server', function() {
   var server;
 
   beforeAll(function() {
@@ -53,7 +53,7 @@ describe('game server', function() {
     });
   });
 
-  it('should create new game when client send play game event', () => {
+  xit('should create new game when client send play game event', () => {
     var client = createClient();
 
     client.on('connect', function() {
