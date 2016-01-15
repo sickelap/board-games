@@ -37,9 +37,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('build', function(done) {
-  return runSequence([
-    'clientTS', 'serverTS'
-  ], done);
+  return runSequence(['clientTS', 'serverTS'], done);
 });
 
 gulp.task('clientTS', function() {
@@ -57,9 +55,7 @@ gulp.task('serverTS', function() {
 });
 
 gulp.task('watch', function(done) {
-  return runSequence([
-    'clientTS:watch', 'serverTS:watch', 'test:watch'
-  ], done);
+  return runSequence(['clientTS:watch', 'serverTS:watch'], done);
 });
 
 gulp.task('test:watch', function() {
@@ -67,9 +63,13 @@ gulp.task('test:watch', function() {
 });
 
 gulp.task('clientTS:watch', function() {
-  return gulp.watch('client/**/*.ts', ['clientTS']);
+  return gulp.watch('client/**/*.ts', function(done) {
+    return runSequence(['clientTS', 'test'], done);
+  });
 });
 
 gulp.task('serverTS:watch', function() {
-  return gulp.watch('server/**/*.ts', ['serverTS']);
+  return gulp.watch('server/**/*.ts', function(done) {
+    return runSequence(['serverTS', 'test'], done);
+  });
 });
