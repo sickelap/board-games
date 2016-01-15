@@ -1,0 +1,13 @@
+{
+  "libs": [
+    "angular2",
+    "node"
+  ],
+  "loadEagerly": [],
+  "plugins": {
+    "requirejs": {
+      "baseURL": "./",
+      "paths": {}
+    }
+  }
+}
