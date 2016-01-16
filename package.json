@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "start": "gulp build && node server/app",
     "postinstall": "node_modules/.bin/tsd install"
   },
   "dependencies": {

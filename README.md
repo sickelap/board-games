@@ -9,4 +9,4 @@
 # Install and run
 
 - `npm install`
-- `gulp`
+- `npm start`

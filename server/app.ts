@@ -12,6 +12,8 @@ var gameServer = new GameServer(connection);
 app.use(express.static(__dirname + '/../node_modules'));
 app.use(express.static(__dirname + '/../client'));
 
-server.listen(process.env.APP_PORT || 3000);
+server.listen(process.env.APP_PORT || 3000, () => {
+  console.log('Server started!')
+});
 
 export var App = server;
