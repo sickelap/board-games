@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "gulp build && node server/app",
-    "postinstall": "node_modules/.bin/tsd install"
+    "postinstall": "node_modules/.bin/tsd install",
+    "clean": "find {client,server} -type f -name '*.js' -o -name '*.js.map' | xargs rm -rf && rm -rf {node_modules,typings}"
   },
   "dependencies": {
     "angular2": "2.0.0-beta.1",
