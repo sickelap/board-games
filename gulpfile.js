@@ -8,7 +8,7 @@ var gls = require('gulp-live-server');
 var jasmine = require('gulp-jasmine');
 
 gulp.task('default', function(done) {
-  runSequence('build', 'watch', 'serve', done);
+  runSequence('build', 'test', 'watch', 'serve', done);
 });
 
 gulp.task('build', ['clientTS', 'serverTS']);
