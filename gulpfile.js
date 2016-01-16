@@ -48,14 +48,20 @@ gulp.task('test:watch', function() {
 });
 
 gulp.task('clientTS', function() {
-  tsconfig.compilerOptions.module = 'system';
+  Object.assign(tsconfig.compilerOptions, {
+    module: 'system',
+    sourceMap: true
+  });
   return gulp.src('client/**/*.ts')
     .pipe(ts(tsconfig.compilerOptions)).js
     .pipe(gulp.dest('client'));
 });
 
 gulp.task('serverTS', function() {
-  tsconfig.compilerOptions.module = 'commonjs';
+  Object.assign(tsconfig.compilerOptions, {
+    module: 'commonjs',
+    sourceMap: false
+  });
   return gulp.src(['server/**/*.ts'])
     .pipe(ts(tsconfig.compilerOptions)).js
     .pipe(gulp.dest('server'));
