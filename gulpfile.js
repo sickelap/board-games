@@ -8,7 +8,7 @@ var gls = require('gulp-live-server');
 var jasmine = require('gulp-jasmine');
 
 gulp.task('default', function(done) {
-  runSequence(['build', 'test', 'watch', 'serve'], done);
+  runSequence('build', 'watch', 'serve', done);
 });
 
 gulp.task('test', function() {
@@ -26,19 +26,17 @@ gulp.task('serve', function() {
     'server/**/*.js'
   ];
 
-  server.start();
-
   gulp.watch(clientFiles, function(file) {
     server.notify.apply(server, [file]);
   });
   gulp.watch(serverFiles, function() {
     server.start.bind(server)();
   });
+
+  return server.start();
 });
 
-gulp.task('build', function(done) {
-  return runSequence(['clientTS', 'serverTS'], done);
-});
+gulp.task('build', ['clientTS', 'serverTS']);
 
 gulp.task('clientTS', function() {
   tsconfig.compilerOptions.module = 'system';
@@ -54,22 +52,15 @@ gulp.task('serverTS', function() {
     .pipe(gulp.dest('server'));
 });
 
-gulp.task('watch', function(done) {
-  return runSequence(['clientTS:watch', 'serverTS:watch'], done);
+gulp.task('watch', ['build:watch', 'test:watch']);
+
+gulp.task('build:watch', function() {
+  var watchList = ['server/**/*.ts', 'client/**/*.ts'];
+  gulp.watch(watchList, function() {
+    runSequence(['serverTS', 'clientTS'], 'test');
+  });
 });
 
 gulp.task('test:watch', function() {
-  return gulp.watch('spec/**/*.spec.js', ['test']);
-});
-
-gulp.task('clientTS:watch', function() {
-  return gulp.watch('client/**/*.ts', function(done) {
-    return runSequence(['clientTS', 'test'], done);
-  });
-});
-
-gulp.task('serverTS:watch', function() {
-  return gulp.watch('server/**/*.ts', function(done) {
-    return runSequence(['serverTS', 'test'], done);
-  });
+  gulp.watch('spec/**/*.spec.js', ['test']);
 });
