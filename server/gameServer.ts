@@ -1,3 +1,5 @@
+/// <reference path="../typings/tsd.d.ts" />
+
 import {Player, PlayerList} from './player';
 import {Game, GameList, GameType, Action, Board} from './game';
 
@@ -17,45 +19,17 @@ export interface GameCallback {
 
 export class GameServer {
   games: GameList;
-  players: PlayerList;
 
   constructor(public server: SocketIO.Server) {
-    this.games = new GameList();
-    this.players = new PlayerList();
-    server.on('connect', this.onClientConnect);
+    server.on('connect', this.onClientConnect.bind(this));
   }
 
-  public playAction(params: PlayGameParams, callback: GameCallback): void {
-    var player = this.players.findOrCreate(params.player);
-    var game = this.games.findGameByPlayer(player);
-
-    if (!game) {
-      game = this.games.createGame(params.game.type);
-    }
-
-    callback(game);
-  }
-
-  public leaveAction(params: LeaveGameParams, callback: GameCallback): void {
-    var game: Game;
-    callback(game);
-  }
-
-  public moveAction(gameId: number, action: Action, callback: GameCallback): void {
-    var game: Game;
-    callback(game);
-  }
-
-  public configureAction(board: Board, callback: GameCallback): void {
-    var game: Game;
-    callback(game);
+  private pingAction(callback: any) {
+    callback('pong');
   }
 
   private onClientConnect(socket: SocketIO.Socket): void {
-    socket.on('configure', this.configureAction);
-    socket.on('play', this.playAction);
-    socket.on('move', this.moveAction);
-    socket.on('leave', this.leaveAction);
+    socket.on('ping', this.pingAction.bind(this));
     this.broadcastGameList();
   }
 
