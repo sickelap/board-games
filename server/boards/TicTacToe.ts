@@ -1,44 +1,75 @@
 import {Player} from '../player';
-import {Board, Action} from '../game';
+import {Board, BoardState, Action} from '../game';
 
-const PLAYERS = 2;
+const NUM_PLAYERS = 2;
+
+export var ResultStatus = {
+  OK: 'ok',
+  ERROR: 'error'
+};
+
+interface Result {
+  status: string,
+  description?: string,
+  data?: any
+}
+
+export class ResultSuccess implements Result {
+  public status: string = ResultStatus.OK;
+  public description: string;
+  constructor(public data?: any) {}
+}
+
+export class ResultError implements Result {
+  public status: string = ResultStatus.ERROR;
+  constructor(public description: string = 'Unspecified error') {}
+}
 
 export class TicTacToe implements Board {
-  _content: Array<string>;
-  players: Array<Player>;
-  winner: Player;
-  isConfigured: boolean = false;
+  _content: Array<string> = ['','','','','','','','',''];
+  _players: Array<Player> = [];
+  _ready: Array<Player> = [];
+  _state: BoardState = BoardState.NEW;
 
-  constructor() {
-    this._content = ['','','','','','','','',''];
-    this.winner = null;
-  }
-
-  configure(): void {
-  }
-
-  getContent(): Array<string> {
+  get content(): Array<string> {
     return this._content;
   }
 
-  makeMove(action: Action): void {
-
+  get players(): Array<Player> {
+    return this._players;  
   }
 
-  getWinner(): Player {
-    return null;
+  setPlayerReady(player: Player) {
+    if (this._players.indexOf(player) === -1) {
+      return;
+    }
+
+    if (this._ready.indexOf(player) === -1) {
+      this._ready.push(player);
+    }
   }
 
-  allPlayersJoined(): boolean {
-    return this.players.length === PLAYERS;
+  start() {
+    if (this._state !== BoardState.NEW) {
+      return new ResultError('Unable start (state = ' + this._state + ')');
+    }
+
+    if (this.players.length !== NUM_PLAYERS) {
+      return new ResultError('Not all players joined');
+    }
+
+    this._state = BoardState.RUNNING;
+
+    return new ResultSuccess();
   }
 
-  addPlayer(player: Player): void {
-    this.players.push(player);    
-  }
+  addPlayer(player: Player): Result {
+    if (this.players.length ===  NUM_PLAYERS) {
+      return new ResultError('Too many players');
+    }
 
-  removePlayer(player: Player): void {
-    var index = this.players.indexOf(player);
-    this.players.splice(index, 1);
+    this.players.push(player);
+
+    return new ResultSuccess();
   }
 }

@@ -9,7 +9,7 @@ export interface Action {
   y: number;
 }
 
-export enum GameState {
+export enum BoardState {
   NEW = 0,
   RUNNING = 1,
   ENDED = 2
@@ -22,20 +22,19 @@ export enum GameType {
 }
 
 export interface Board {
-  players: Array<Player>;
-  isConfigured: boolean;
-
-  makeMove(a: Action): void;
-  getContent(): any;
-  getWinner(): Player;
-  addPlayer(p: Player): void;
-  allPlayersJoined(): boolean;
-  configure(): void;
+//  players: Array<Player>;
+//  isConfigured: boolean;
+//
+//  makeMove(a: Action): void;
+//  getContent(): any;
+//  getWinner(): Player;
+//  addPlayer(p: Player): void;
+//  allPlayersJoined(): boolean;
+//  configure(): void;
 }
 
 export class Game {
   gameType: GameType;
-  state: GameState;
   board: Board;
 
   constructor(gameType: GameType) {
