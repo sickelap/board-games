@@ -1,3 +1,5 @@
+/// <reference path="../../typings/tsd.d.ts" />
+//
 import * as _ from 'lodash';
 import {Player} from '../player';
 import {BoardState, Result, ResultSuccess, ResultError, Board, Action} from '../board';
@@ -11,6 +13,7 @@ export class TicTacToe implements Board {
   private _readyPlayers: Array<Player> = [];
   private _state: string = BoardState.NEW;
   private _stones = ['X', 'O'];
+  private _nextMove: Player = null;
 
   get content(): Array<string> {
     return this._content;
@@ -21,7 +24,7 @@ export class TicTacToe implements Board {
   }
 
   get players(): Array<Player> {
-    return this._players;  
+    return this._players;
   }
 
   get readyPlayers(): Array<Player> {
@@ -64,6 +67,9 @@ export class TicTacToe implements Board {
     this._readyPlayers.push(player);
 
     if (this._readyPlayers.length === NUM_PLAYERS) {
+      if (this._nextMove === null) {
+        this._nextMove = this._getPlayerForNextMove();
+      }
       this._state = BoardState.RUNNING;
     }
 
@@ -71,16 +77,9 @@ export class TicTacToe implements Board {
   }
 
   move(action: Action): Result {
-    if (this._state === 'ENDED') {
-      return new ResultError('Game is ended');
-    }
-
-    if (this._state !== 'RUNNING') {
-      return new ResultError('Game is not started yet');
-    }
-
-    if (!this._isValidAction(action)) {
-      return new ResultError('Invalid action');
+    var result = this._validateAction(action);
+    if (result.status !== 'ok') {
+      return result;
     }
 
     this._updateContent(action);
@@ -98,17 +97,43 @@ export class TicTacToe implements Board {
       this._state = BoardState.ENDED;
     }
 
+    this._nextMove = this._getPlayerForNextMove();
+
     return new ResultSuccess({
       board: this._content,
       winner: this._winner
     });
   }
 
-  _isValidAction(action: Action): boolean {
+  _getPlayerForNextMove(): Player {
+    if (this._nextMove === null) {
+      return _.sample(this._players);
+    }
+
+    return _.first(_.without(this._players, this._nextMove));
+  }
+
+  _validateAction(action: Action): Result {
+    if (this._state === 'ENDED') {
+      return new ResultError('Game ended');
+    }
+
+    if (this._state !== 'RUNNING') {
+      return new ResultError('Game is not started yet');
+    }
+
+    if (this._nextMove != action.player) {
+      return new ResultError('Not your turn');
+    }
+
     var availablePositions = this._availablePositions();
     var movePosition = this._getBoardPosition(action);
 
-    return _.includes(availablePositions, movePosition);
+    if (!_.includes(availablePositions, movePosition)) {
+      return new ResultError('Invalid move');
+    }
+
+    return new ResultSuccess();
   }
 
   _getStoneForPlayer(player: Player): string {

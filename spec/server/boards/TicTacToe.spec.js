@@ -17,10 +17,11 @@ var player3 = {
 };
 
 describe('TicTacToe', () => {
-  var board;
+  var board, nextMovePlayer;
 
   beforeEach(() => {
     board = new TicTacToe();
+    nextMovePlayer = spyOn(board, '_getPlayerForNextMove').and;
   });
 
   describe('new instance', () => {
@@ -175,6 +176,7 @@ describe('TicTacToe', () => {
   describe('make move', () => {
     it('should not allow to make move if game is not running', () => {
       var result;
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
 
@@ -194,6 +196,7 @@ describe('TicTacToe', () => {
 
     it('should allow to make a move if game is started', () => {
       var result;
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
 
@@ -213,11 +216,13 @@ describe('TicTacToe', () => {
 
     it('should allow to make a move if action is valid', () => {
       var result;
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
       board.setReady(player1);
       board.setReady(player2);
 
+      // assuming blank board
       result = board.move({
         player: player1,
         to: {
@@ -229,8 +234,9 @@ describe('TicTacToe', () => {
       expect(result.status).toBe('ok');
     });
 
-    it('should allow to make a move if action is valid', () => {
+    it('should not allow to make a move if action is invalid', () => {
       var result;
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
       board.setReady(player1);
@@ -249,11 +255,12 @@ describe('TicTacToe', () => {
       });
 
       expect(result.status).toBe('error');
-      expect(result.description).toBe('Invalid action');
+      expect(result.description).toBe('Invalid move');
     });
 
     it('should return updated board after valid action', () => {
       var result;
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
 
@@ -277,8 +284,7 @@ describe('TicTacToe', () => {
 
     it('should change game state to finished if there is no moves left', () => {
       var result;
-      spyOn(board, '_isValidAction').and.returnValue(true);
-      spyOn(board, '_getStoneForPlayer').and.returnValue('X');
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
       board.setReady(player1);
@@ -307,8 +313,7 @@ describe('TicTacToe', () => {
 
     it('should change game state to finished if player1 won the game', () => {
       var result;
-      spyOn(board, '_isValidAction').and.returnValue(true);
-      spyOn(board, '_getStoneForPlayer').and.returnValue('X');
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
       board.setReady(player1);
@@ -411,20 +416,29 @@ describe('TicTacToe', () => {
     });
 
     it('should return null if game is started but there is no winner', () => {
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
       board.setReady(player1);
       board.setReady(player2);
       board._content = [
         'X', 'O', 'X',
-        ' ', 'X', 'O',
+        ' ', 'O', 'O',
         ' ', ' ', 'O'
       ];
+      board.move({
+        player: player1,
+        to: {
+          x: 0,
+          y: 1
+        }
+      });
 
       expect(board.winner).toBe(null);
     });
 
     it('should return winner player1 when player1 is the winner', () => {
+      board._nextMove = player1;
       board.join(player1);
       board.join(player2);
       board.setReady(player1);
@@ -432,21 +446,47 @@ describe('TicTacToe', () => {
       board._content = [
         'X', 'O', 'X',
         'X', 'O', 'O',
-        'X', ' ', 'O'
+        ' ', ' ', 'O'
       ];
+      board.move({
+        player: player1,
+        to: {
+          x: 0,
+          y: 2
+        }
+      });
 
       expect(board.winner).toEqual(player1);
     });
   });
-  // -- result --
-  // should return error if game is not ENDED
-  // should return success if game is ended and result should not contain winner if result is TIE
-  // should return success if game is ended and result should contain winner
-  //
-  // -- validate move --
-  // the move is valid if:
-  // - game is not finished
-  // - player is allowed to make turn
-  // - cell player trying to enter is empty
-  //
+
+  describe('move order', () => {
+    it('should not allow to make 2 moves in a row', () => {
+      var result;
+      board._nextMove = player1;
+      board.join(player1);
+      board.join(player2);
+      board.setReady(player1);
+      board.setReady(player2);
+
+      result = board.move({
+        player: player1,
+        to: {
+          x: 0,
+          y: 0
+        }
+      });
+      expect(result.status).toBe('ok');
+
+      result = board.move({
+        player: player1,
+        to: {
+          x: 1,
+          y: 0
+        }
+      });
+      expect(result.status).toBe('error');
+      expect(result.description).toBe('Not your turn');
+    });
+  });
 });
