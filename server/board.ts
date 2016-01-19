@@ -25,6 +25,15 @@ export interface Result {
   data?: any
 }
 
+export interface BoardJSON {
+  state: string,
+  content: any,
+  players: Array<Player>,
+  readyPlayers: Array<Player>,
+  winner: Player,
+  nextMove: Player
+}
+
 export class ResultSuccess implements Result {
   public status: string = ResultStatus.OK;
   public description: string;
@@ -37,14 +46,10 @@ export class ResultError implements Result {
 }
 
 export interface Board {
-  //  players: Array<Player>;
-  //  isConfigured: boolean;
-  //
-  //  makeMove(a: Action): void;
-  //  getContent(): any;
-  //  getWinner(): Player;
-  //  addPlayer(p: Player): void;
-  //  allPlayersJoined(): boolean;
-  //  configure(): void;
+  configure(config: any): Result,
+  join(player: Player): Result;
+  setReady(player: Player): Result;
+  move(action: Action): Result;
+  serialize(): BoardJSON;
 }
 

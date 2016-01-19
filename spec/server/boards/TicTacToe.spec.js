@@ -26,7 +26,7 @@ describe('TicTacToe', () => {
 
   describe('new instance', () => {
     it('should have empty board', () => {
-      expect(board.content).toEqual([
+      expect(board.serialize().content).toEqual([
         ' ', ' ', ' ',
         ' ', ' ', ' ',
         ' ', ' ', ' '
@@ -34,15 +34,15 @@ describe('TicTacToe', () => {
     });
 
     it('should have state NEW', () => {
-      expect(board.state).toBe(Board.BoardState.NEW);
+      expect(board.serialize().state).toBe(Board.BoardState.NEW);
     });
 
     it('should have empty players array', () => {
-      expect(board.players).toEqual([]);
+      expect(board.serialize().players).toEqual([]);
     });
 
     it('should have empty readyPlayers array', () => {
-      expect(board.readyPlayers).toEqual([]);
+      expect(board.serialize().readyPlayers).toEqual([]);
     });
   });
 
@@ -90,14 +90,14 @@ describe('TicTacToe', () => {
 
       actual = board.join(player1);
       expect(actual).toEqual(new Board.ResultSuccess());
-      expect(board.players.length).toBe(1);
+      expect(board.serialize().players.length).toBe(1);
 
       actual = board.join(player2);
       expect(actual).toEqual(new Board.ResultSuccess());
-      expect(board.players.length).toBe(2);
+      expect(board.serialize().players.length).toBe(2);
 
       actual = board.join(player3);
-      expect(board.players.length).toBe(2);
+      expect(board.serialize().players.length).toBe(2);
       expect(actual.status).toBe('error');
       expect(actual.description).toBe('Too many players');
     });
@@ -108,9 +108,9 @@ describe('TicTacToe', () => {
 
       board.setReady(player1);
 
-      expect(board.readyPlayers.length).toBe(1);
-      expect(board.readyPlayers[0]).toEqual(player1);
-      expect(board.state).toBe(Board.BoardState.NEW);
+      expect(board.serialize().readyPlayers.length).toBe(1);
+      expect(board.serialize().readyPlayers[0]).toEqual(player1);
+      expect(board.serialize().state).toBe(Board.BoardState.NEW);
     });
 
     it('should update board state to RUNNING if two players are ready', () => {
@@ -120,7 +120,7 @@ describe('TicTacToe', () => {
       board.setReady(player1);
       board.setReady(player2);
 
-      expect(board.state).toBe(Board.BoardState.RUNNING);
+      expect(board.serialize().state).toBe(Board.BoardState.RUNNING);
     });
 
     it('should allow to set player ready only once', () => {
@@ -129,7 +129,7 @@ describe('TicTacToe', () => {
       board.join(player2);
 
       result = board.setReady(player1);
-      expect(board.readyPlayers.length).toBe(1);
+      expect(board.serialize().readyPlayers.length).toBe(1);
       expect(result.status).toBe('ok');
 
       result = board.setReady(player1);
@@ -142,10 +142,10 @@ describe('TicTacToe', () => {
       board.join(player1);
 
       board.setReady(player1);
-      expect(board.readyPlayers.length).toBe(1);
+      expect(board.serialize().readyPlayers.length).toBe(1);
 
       actual = board.setReady(player2);
-      expect(board.readyPlayers.length).toBe(1);
+      expect(board.serialize().readyPlayers.length).toBe(1);
       expect(actual.status).toBe('error');
       expect(actual.description).toBe('Not a player');
     });
@@ -308,7 +308,7 @@ describe('TicTacToe', () => {
         'O', 'X', 'O',
         'X', 'X', 'O'
       ]);
-      expect(board.state).toBe(Board.BoardState.ENDED);
+      expect(board.serialize().state).toBe(Board.BoardState.ENDED);
     });
 
     it('should change game state to finished if player1 won the game', () => {
@@ -337,7 +337,7 @@ describe('TicTacToe', () => {
         'O', 'X', 'O',
         ' ', 'O', 'X'
       ]);
-      expect(board.state).toBe(Board.BoardState.ENDED);
+      expect(board.serialize().state).toBe(Board.BoardState.ENDED);
     });
   });
 
@@ -412,7 +412,7 @@ describe('TicTacToe', () => {
       board.join(player2);
       board.setReady(player1);
 
-      expect(board.winner).toBe(null);
+      expect(board.serialize().winner).toBe(null);
     });
 
     it('should return null if game is started but there is no winner', () => {
@@ -421,7 +421,7 @@ describe('TicTacToe', () => {
       board.join(player2);
       board.setReady(player1);
       board.setReady(player2);
-      board._content = [
+      board.serialize().content = [
         'X', 'O', 'X',
         ' ', 'O', 'O',
         ' ', ' ', 'O'
@@ -434,7 +434,7 @@ describe('TicTacToe', () => {
         }
       });
 
-      expect(board.winner).toBe(null);
+      expect(board.serialize().winner).toBe(null);
     });
 
     it('should return winner player1 when player1 is the winner', () => {
@@ -456,7 +456,7 @@ describe('TicTacToe', () => {
         }
       });
 
-      expect(board.winner).toEqual(player1);
+      expect(board.serialize().winner).toEqual(player1);
     });
   });
 

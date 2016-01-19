@@ -2,7 +2,7 @@
 //
 import * as _ from 'lodash';
 import {Player} from '../player';
-import {BoardState, Result, ResultSuccess, ResultError, Board, Action} from '../board';
+import {BoardState, Result, ResultSuccess, ResultError, Board, Action, BoardJSON} from '../board';
 
 const NUM_PLAYERS = 2;
 
@@ -14,26 +14,6 @@ export class TicTacToe implements Board {
   private _state: string = BoardState.NEW;
   private _stones = ['X', 'O'];
   private _nextMove: Player = null;
-
-  get content(): Array<string> {
-    return this._content;
-  }
-
-  get state(): string {
-    return this._state;
-  }
-
-  get players(): Array<Player> {
-    return this._players;
-  }
-
-  get readyPlayers(): Array<Player> {
-    return this._readyPlayers;
-  }
-
-  get winner(): Player {
-    return this._winner;
-  }
 
   configure(): Result {
     if (this._state !== BoardState.NEW) {
@@ -103,6 +83,17 @@ export class TicTacToe implements Board {
       board: this._content,
       winner: this._winner
     });
+  }
+
+  serialize(): BoardJSON {
+    return {
+      state: this._state,
+      content: this._content,
+      players: this._players,
+      readyPlayers: this._readyPlayers,
+      winner: this._winner,
+      nextMove: this._nextMove
+    };
   }
 
   _getPlayerForNextMove(): Player {
