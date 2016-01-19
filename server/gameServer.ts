@@ -1,7 +1,8 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 import {Player, PlayerList} from './player';
-import {Game, GameList, GameType, Action, Board} from './game';
+import {Game, GameType} from './game';
+import {Action, Board} from './board';
 
 export interface PlayGameParams {
   player: Player;
@@ -18,7 +19,7 @@ export interface GameCallback {
 }
 
 export class GameServer {
-  games: GameList;
+  games: Array<Game>;
 
   constructor(public server: SocketIO.Server) {
     server.on('connect', this.onClientConnect.bind(this));
