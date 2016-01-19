@@ -29,7 +29,7 @@ export interface BoardJSON {
   state: string,
   content: any,
   players: Array<Player>,
-  readyPlayers: Array<Player>,
+  ready: Array<Player>,
   winner: Player,
   nextMove: Player
 }
@@ -48,7 +48,7 @@ export class ResultError implements Result {
 export interface Board {
   configure(config: any): Result,
   join(player: Player): Result;
-  setReady(player: Player): Result;
+  ready(player: Player): Result;
   move(action: Action): Result;
   serialize(): BoardJSON;
 }

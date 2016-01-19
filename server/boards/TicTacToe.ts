@@ -10,7 +10,7 @@ export class TicTacToe implements Board {
   private _content: Array<string> = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
   private _players: Array<Player> = [];
   private _winner: Player = null;
-  private _readyPlayers: Array<Player> = [];
+  private _ready: Array<Player> = [];
   private _state: string = BoardState.NEW;
   private _stones = ['X', 'O'];
   private _nextMove: Player = null;
@@ -35,18 +35,18 @@ export class TicTacToe implements Board {
     return new ResultSuccess();
   }
 
-  setReady(player: Player): Result {
+  ready(player: Player): Result {
     if (this._players.indexOf(player) === -1) {
       return new ResultError('Not a player');
     }
 
-    if (_.find(this._readyPlayers, player)) {
+    if (_.find(this._ready, player)) {
       return new ResultError('Already ready');
     }
 
-    this._readyPlayers.push(player);
+    this._ready.push(player);
 
-    if (this._readyPlayers.length === NUM_PLAYERS) {
+    if (this._ready.length === NUM_PLAYERS) {
       if (this._nextMove === null) {
         this._nextMove = this._getPlayerForNextMove();
       }
@@ -90,7 +90,7 @@ export class TicTacToe implements Board {
       state: this._state,
       content: this._content,
       players: this._players,
-      readyPlayers: this._readyPlayers,
+      ready: this._ready,
       winner: this._winner,
       nextMove: this._nextMove
     };

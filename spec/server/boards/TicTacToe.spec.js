@@ -41,8 +41,8 @@ describe('TicTacToe', () => {
       expect(board.serialize().players).toEqual([]);
     });
 
-    it('should have empty readyPlayers array', () => {
-      expect(board.serialize().readyPlayers).toEqual([]);
+    it('should have empty ready players array', () => {
+      expect(board.serialize().ready).toEqual([]);
     });
   });
 
@@ -106,10 +106,10 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
+      board.ready(player1);
 
-      expect(board.serialize().readyPlayers.length).toBe(1);
-      expect(board.serialize().readyPlayers[0]).toEqual(player1);
+      expect(board.serialize().ready.length).toBe(1);
+      expect(board.serialize().ready[0]).toEqual(player1);
       expect(board.serialize().state).toBe(Board.BoardState.NEW);
     });
 
@@ -117,8 +117,8 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       expect(board.serialize().state).toBe(Board.BoardState.RUNNING);
     });
@@ -128,11 +128,11 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      result = board.setReady(player1);
-      expect(board.serialize().readyPlayers.length).toBe(1);
+      result = board.ready(player1);
+      expect(board.serialize().ready.length).toBe(1);
       expect(result.status).toBe('ok');
 
-      result = board.setReady(player1);
+      result = board.ready(player1);
       expect(result.status).toBe('error');
       expect(result.description).toBe('Already ready');
     });
@@ -141,11 +141,11 @@ describe('TicTacToe', () => {
       var actual;
       board.join(player1);
 
-      board.setReady(player1);
-      expect(board.serialize().readyPlayers.length).toBe(1);
+      board.ready(player1);
+      expect(board.serialize().ready.length).toBe(1);
 
-      actual = board.setReady(player2);
-      expect(board.serialize().readyPlayers.length).toBe(1);
+      actual = board.ready(player2);
+      expect(board.serialize().ready.length).toBe(1);
       expect(actual.status).toBe('error');
       expect(actual.description).toBe('Not a player');
     });
@@ -155,8 +155,8 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       expect(board._getStoneForPlayer(player1)).toBe('X');
     });
@@ -166,8 +166,8 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       expect(board._getStoneForPlayer(player2)).toBe('O');
     });
@@ -180,7 +180,7 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
+      board.ready(player1);
 
       result = board.move({
         player: player1,
@@ -200,8 +200,8 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       result = board.move({
         player: player1,
@@ -219,8 +219,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       // assuming blank board
       result = board.move({
@@ -239,8 +239,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
       board._content = [
         'O', ' ', ' ',
         ' ', ' ', ' ',
@@ -264,8 +264,8 @@ describe('TicTacToe', () => {
       board.join(player1);
       board.join(player2);
 
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       result = board.move({
         player: player1,
@@ -287,8 +287,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
       board._content = [
         'X', 'O', 'X',
         'O', 'X', 'O',
@@ -316,8 +316,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
       board._content = [
         'X', 'O', 'X',
         'O', 'X', 'O',
@@ -410,7 +410,7 @@ describe('TicTacToe', () => {
     it('should be null if game is not started', () => {
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
+      board.ready(player1);
 
       expect(board.serialize().winner).toBe(null);
     });
@@ -419,8 +419,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
       board.serialize().content = [
         'X', 'O', 'X',
         ' ', 'O', 'O',
@@ -441,8 +441,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
       board._content = [
         'X', 'O', 'X',
         'X', 'O', 'O',
@@ -466,8 +466,8 @@ describe('TicTacToe', () => {
       board._nextMove = player1;
       board.join(player1);
       board.join(player2);
-      board.setReady(player1);
-      board.setReady(player2);
+      board.ready(player1);
+      board.ready(player2);
 
       result = board.move({
         player: player1,
