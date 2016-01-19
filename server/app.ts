@@ -2,12 +2,12 @@
 import * as express from 'express';
 import * as socketio from 'socket.io';
 import * as http from 'http';
-import {GameServer} from './gameServer';
+import {GameController} from './controller';
 
 var app = express();
 var server = http.createServer(app);
 var connection = socketio(server);
-var gameServer = new GameServer(connection);
+var controller = new GameController(connection);
 
 app.use(express.static(__dirname + '/../node_modules'));
 app.use(express.static(__dirname + '/../client'));
