@@ -6,6 +6,7 @@ var ts = require('gulp-typescript');
 var tsconfig = require('./tsconfig.json');
 var gls = require('gulp-live-server');
 var jasmine = require('gulp-jasmine');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('default', function(done) {
   runSequence('build', 'test', 'watch', 'serve', done);
@@ -49,18 +50,18 @@ gulp.task('test:watch', function() {
 
 gulp.task('clientTS', function() {
   Object.assign(tsconfig.compilerOptions, {
-    module: 'system',
-    sourceMap: true
+    module: 'system'
   });
   return gulp.src('client/**/*.ts')
+    .pipe(sourcemaps.init())
     .pipe(ts(tsconfig.compilerOptions)).js
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('client'));
 });
 
 gulp.task('serverTS', function() {
   Object.assign(tsconfig.compilerOptions, {
-    module: 'commonjs',
-    sourceMap: false
+    module: 'commonjs'
   });
   return gulp.src(['server/**/*.ts'])
     .pipe(ts(tsconfig.compilerOptions)).js
