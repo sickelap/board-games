@@ -4,16 +4,16 @@ import {Injectable} from 'angular2/core';
 export class Mediator {
   private _subscriptions: Array<any> = [];
 
-  publish(channel, data) {
+  publish(channel: string, data: any) {
     if (!this._subscriptions[channel]) {
       return;
     }
 
     var subscribers = this._subscriptions[channel].slice();
-    subscribers.forEach(subscriber => subscriber.callback(data));
+    subscribers.forEach((subscriber: any) => subscriber.callback(data));
   }
 
-  subscribe(channel, cb, id) {
+  subscribe(channel: string, cb: () => void, id: number | string) {
     if (!this._subscriptions[channel]) {
       this._subscriptions[channel] = [];
     }
@@ -24,7 +24,7 @@ export class Mediator {
     });
   };
 
-  unsubscribe(channel, id) {
+  unsubscribe(channel: string, id: number | string) {
     if (!this._subscriptions[channel]) {
       return false;
     }
