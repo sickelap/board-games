@@ -9,7 +9,7 @@ export class SocketService {
     this._socket = io.connect();
   }
 
-  emit(...args: any[]) {
+  emit(...args: any[]): void {
     this._socket.emit.apply(this._socket, args);
   }
 
