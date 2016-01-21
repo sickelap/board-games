@@ -3,7 +3,7 @@ import {Injectable} from 'angular2/core';
 
 @Injectable()
 export class SocketService {
-  _socket: any;
+  _socket: SocketIO.Server;
 
   constructor() {
     this._socket = io.connect();
