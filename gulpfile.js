@@ -7,6 +7,7 @@ var tsconfig = require('./tsconfig.json');
 var gls = require('gulp-live-server');
 var jasmine = require('gulp-jasmine');
 var sourcemaps = require('gulp-sourcemaps');
+var sass = require('gulp-sass');
 
 gulp.task('default', function(done) {
   runSequence('build', 'test', 'watch', 'serve', done);
@@ -42,6 +43,7 @@ gulp.task('build:watch', function() {
   gulp.watch(watchList, function() {
     runSequence(['serverTS', 'clientTS'], 'test');
   });
+  gulp.watch('client/**/*.scss', ['sass']);
 });
 
 gulp.task('test:watch', function() {
@@ -50,7 +52,7 @@ gulp.task('test:watch', function() {
 
 gulp.task('clientTS', function() {
   Object.assign(tsconfig.compilerOptions, {
-    module: 'system'
+    module: 'commonjs'
   });
   return gulp.src('client/**/*.ts')
     .pipe(sourcemaps.init())
@@ -72,3 +74,8 @@ gulp.task('test', function() {
   return gulp.src('spec/**/*.spec.js').pipe(jasmine());
 });
 
+gulp.task('sass', function() {
+  gulp.src('client/styles/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('client/styles'));
+});
