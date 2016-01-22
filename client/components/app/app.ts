@@ -1,14 +1,15 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
+import {LobbyComponent} from '../lobby/lobby.component';
+import {GameComponent} from '../game/game.component';
 
 @Component({
   selector: 'app',
-  template: 'hi there',
-  directives: [ROUTER_DIRECTIVES]
+  template: `<router-outlet></router-outlet>`,
+  directives: [ROUTER_DIRECTIVES],
 })
 @RouteConfig([
-    { path: '/', useAsDefault: true }
+  { path: '/', as: 'Lobby', component: LobbyComponent, useAsDefault: true },
+  { path: '/game', as: 'Game', component: GameComponent }
 ])
-export class App {
-
-}
+export class App { }
