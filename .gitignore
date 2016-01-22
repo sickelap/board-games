@@ -9,5 +9,6 @@ server/**/*.d.ts
 client/**/*.js
 client/**/*.js.map
 client/**/*.d.ts
+*.css
 
 !*.spec.js
