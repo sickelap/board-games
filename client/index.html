@@ -2,6 +2,15 @@
 <html>
 
 <head>
+  <base href="/" />
+  <title>Board Games</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Board Games">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" />
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="styles/main.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -13,12 +22,13 @@
   <script src="rxjs/bundles/Rx.js"></script>
   <script src="angular2/bundles/angular2.dev.js"></script>
   <script src="angular2/bundles/router.dev.js"></script>
+  <script src="socket.io/socket.io.js"></script>
   <script>
     System.config({
       defaultJSExtensions: true,
       warnings: true
     });
-    System.import('bootstrap').then(null, console.warn.bind(console));
+    System.import('bootstrap').then(null, console.error.bind(console));
   </script>
 </body>
 
