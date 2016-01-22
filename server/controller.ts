@@ -6,10 +6,10 @@ export class GameController {
   }
 
   private onClientConnect(socket: SocketIO.Socket): void {
-    this.broadcastGameList();
+    socket.on('getGames', () => this._getGames(socket));
   }
 
-  private broadcastGameList(): void {
-    this.server.emit('games', []);
+  _getGames(socket: SocketIO.Socket) {
+    socket.emit('gameList', ['this','is','game','list']);
   }
 }
