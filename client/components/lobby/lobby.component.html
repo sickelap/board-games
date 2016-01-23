@@ -1,1 +1,11 @@
-Lobby Component. [<a [routerLink]="['Game']">Go To Game</a>]
+Lobby Component.
+
+<ul>
+  <li>[<a [routerLink]="['Game']">Go To Game</a>]</li>
+</ul>
+
+<ul>
+  <li *ngFor="#game of games">
+    {{game}}
+  </li>
+</ul>
