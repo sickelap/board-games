@@ -12,7 +12,8 @@ import {ProfileComponent} from '../profile/profile.component';
 })
 @RouteConfig([
   { path: '/', as: 'Lobby', component: LobbyComponent, useAsDefault: true },
-  { path: '/game', as: 'Game', /*component: GameComponent*/ redirectTo: ['Lobby'] },
+  //{ path: '/game/...', as: 'Game', component: GameComponent },
+  { path: '/game', as: 'Game', redirectTo: ['Lobby'] },
   { path: '/game/tic-tac-toe', as: 'TicTacToe', component: TicTacToe },
   { path: '/profile', as: 'Profile', component: ProfileComponent }
 ])
