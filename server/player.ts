@@ -1,22 +1,15 @@
 import * as _ from 'lodash';
 
 export class Player {
-  id: number;
   name: string;
 
-  constructor(id: number, name = "Anonymous Coward") {}
+  constructor(name = "Anonymous Coward") {}
 }
 
 export class PlayerList {
   players: Array<Player>;
 
-  findOrCreate(user: Player) {
-    var player = this.findById(user.id);
-
-    if (!player) {
-      player = new Player(user.id, user.name);
-    }
-
+  findOrCreate(player: Player) {
     this.players.push(player);
 
     return player;
