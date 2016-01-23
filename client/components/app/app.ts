@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
+import {ROUTER_DIRECTIVES, RouteConfig, Router} from 'angular2/router';
 import {LobbyComponent} from '../lobby/lobby.component';
 import {GameComponent} from '../game/game.component';
 import {ProfileComponent} from '../profile/profile.component';
@@ -14,4 +14,10 @@ import {ProfileComponent} from '../profile/profile.component';
   { path: '/game', as: 'Game', component: GameComponent },
   { path: '/profile', as: 'Profile', component: ProfileComponent }
 ])
-export class App { }
+export class App {
+  constructor(private router: Router) {
+    if (!localStorage.getItem('username')) {
+      this.router.navigate(['Profile']);
+    }
+  }
+}
