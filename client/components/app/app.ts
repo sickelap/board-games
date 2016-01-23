@@ -2,6 +2,7 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, RouteConfig, Router} from 'angular2/router';
 import {LobbyComponent} from '../lobby/lobby.component';
 import {GameComponent} from '../game/game.component';
+import {TicTacToe} from '../game/boards/tic-tac-toe/board.component';
 import {ProfileComponent} from '../profile/profile.component';
 
 @Component({
@@ -11,7 +12,8 @@ import {ProfileComponent} from '../profile/profile.component';
 })
 @RouteConfig([
   { path: '/', as: 'Lobby', component: LobbyComponent, useAsDefault: true },
-  { path: '/game', as: 'Game', component: GameComponent },
+  { path: '/game', as: 'Game', /*component: GameComponent*/ redirectTo: ['Lobby'] },
+  { path: '/game/tic-tac-toe', as: 'TicTacToe', component: TicTacToe },
   { path: '/profile', as: 'Profile', component: ProfileComponent }
 ])
 export class App {

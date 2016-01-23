@@ -1,7 +1,6 @@
 Lobby Component.
 
 <ul>
-  <li>[<a [routerLink]="['Game']">Go To Game</a>]</li>
   <li>[<a [routerLink]="['Profile']">Profile</a>]</li>
 </ul>
 
@@ -9,4 +8,8 @@ Lobby Component.
   <li *ngFor="#game of games">
     {{game}}
   </li>
+</ul>
+
+<ul>
+  <li><a [routerLink]="['TicTacToe']">Play Tic Tac Toe</a></li>
 </ul>
