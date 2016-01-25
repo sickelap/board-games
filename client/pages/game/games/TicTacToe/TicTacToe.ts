@@ -1,8 +1,8 @@
 import {Component} from 'angular2/core';
 
 @Component({
-  selector: 'board',
-  templateUrl: 'pages/game/boards/tic-tac-toe/board.component.html'
+  selector: 'tic-tac-toe',
+  templateUrl: 'pages/game/games/TicTacToe/TicTacToe.html'
 })
 export class TicTacToe {
   constructor() {

@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {RouterLink} from 'angular2/router';
-import {GameService} from 'services/GameService';
+import {GameService} from 'shared/services/GameService';
 
 @Component({
   selector: 'lobby',

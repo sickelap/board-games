@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {RouterLink, RouteConfig} from 'angular2/router';
-import {GameService} from 'services/GameService';
-import {TicTacToe} from './boards/tic-tac-toe/board.component';
+import {GameService} from 'shared/services/GameService';
+import {TicTacToe} from 'pages/game/games/TicTacToe/TicTacToe';
 
 @Component({
   selector: 'game',
