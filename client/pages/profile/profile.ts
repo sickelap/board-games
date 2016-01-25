@@ -4,10 +4,10 @@ import {Router, RouterLink} from 'angular2/router';
 
 @Component({
   selector: 'profile',
-  templateUrl: 'components/profile/profile.component.html',
+  templateUrl: 'pages/profile/profile.html',
   directives: [RouterLink]
 })
-export class ProfileComponent {
+export class ProfilePage {
   private profileForm;
 
   constructor(private router: Router, private fb: FormBuilder) {

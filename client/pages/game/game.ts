@@ -5,13 +5,13 @@ import {TicTacToe} from './boards/tic-tac-toe/board.component';
 
 @Component({
   selector: 'game',
-  templateUrl: 'components/game/game.component.html',
+  templateUrl: 'pages/game/game.html',
   directives: [RouterLink],
   providers: [GameService]
 })
 @RouteConfig([
-  { path: '/tic-tac-toe', as: 'TicTacToe', component: TicTacToe },
+  { path: '/tic-tac-toe', as: 'TicTacToe', component: TicTacToe, useAsDefault: true },
 ])
-export class GameComponent {
+export class GamePage {
   constructor(private gameService: GameService) {}
 }
