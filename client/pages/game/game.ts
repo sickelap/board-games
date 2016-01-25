@@ -1,17 +1,15 @@
 import {Component} from 'angular2/core';
 import {RouterLink, RouteConfig} from 'angular2/router';
-import {GameService} from 'shared/services/GameService';
 import {TicTacToe} from 'pages/game/games/TicTacToe/TicTacToe';
+import {SiteHeader} from 'shared/directives';
 
 @Component({
   selector: 'game',
   templateUrl: 'pages/game/game.html',
-  directives: [RouterLink],
-  providers: [GameService]
+  directives: [RouterLink,SiteHeader]
 })
 @RouteConfig([
-  { path: '/tic-tac-toe', as: 'TicTacToe', component: TicTacToe, useAsDefault: true },
+  { path: '/', as: 'Game', component: GamePage, useAsDefault: true },
+  { path: '/tic-tac-toe', as: 'TicTacToe', component: TicTacToe }
 ])
-export class GamePage {
-  constructor(private gameService: GameService) {}
-}
+export class GamePage {}
