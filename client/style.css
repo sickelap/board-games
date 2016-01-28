@@ -4,18 +4,50 @@
 .board {
   margin: 0 auto;
 }
-.cell {
+.board-3x3 {
+  width: 300px;
+  height: 300px;
+}
+.board-4x4 {
+  width: 400px;
+  height: 400px;
+}
+li.cell {
+  padding-left: 0;
+  padding-right: 0;
+  display: block;
+  cursor: default;
   border: solid 1px #AAA;
+  background: #DDD;
   height: 100px;
   width: 100px;
-  background: #EEE;
+  float: left;
 }
-.cell:hover {
+.active .cell {
   background: #FFF;
+}
+.active .cell:hover {
+  background: rgba(22,255,0,0.05);
   cursor: pointer;
 }
-.cell.used,.cell.used:hover {
-  background: #D2D2D2;
-  border: solid 1px #AAA;
+.active .cell.used,
+.active .cell.used:hover {
   cursor: default;
+  border: solid 1px #AAA;
+}
+
+.winner {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: green;
+}
+.looser {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.stone {
+  width: 90px;
+  height: 90px;
+  display: inline;
+  margin: 5px;
 }

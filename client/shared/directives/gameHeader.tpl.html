@@ -1,0 +1,52 @@
+<div>
+
+  <div class="container" ng-if="!game.winner">
+    <div ng-if="game.state === 'RUNNING'">
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          <div ng-if="game.next.id === currentUser.id">Your turn</div>
+          <div ng-if="game.next.id !== currentUser.id">{{game.next.name}}'s turn (fingers crossed)</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-5 text-center"
+          ng-class="{
+          winner: game.winner && game.winner.id === game.players[0].id,
+          looser: game.winner && game.winner.id === game.players[1].id
+          }">
+          {{game.players[0].name}} ({{game.players[0].stone}})
+        </div>
+        <div class="col-xs-2 text-center">V.S.</div>
+        <div class="col-xs-5 text-center"
+          ng-class="{
+          winner: game.winner && game.winner.id === game.players[1].id,
+          looser: game.winner && game.winner.id === game.players[0].id
+          }">
+          {{game.players[1].name}} ({{game.players[1].stone}})
+        </div>
+      </div>
+    </div>
+    <div ng-if="game.state === 'NEW'">
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          Waiting for players....
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" ng-if="game.state === 'ENDED'">
+    <div class="row" ng-if="game.winner">
+      <div class="col-xs-12 text-center">
+        <div ng-if="game.winner.id === currentUser.id">YOU WON!</div>
+        <div ng-if="game.winner.id !== currentUser.id">{{game.winner.name}} won the game!</div>
+      </div>
+    </div>
+    <div class="row" ng-if="!game.winner">
+      <div class="col-xs-12 text-center">
+        TIE
+      </div>
+    </div>
+  </div>
+
+</div>

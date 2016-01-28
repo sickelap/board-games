@@ -1,0 +1,15 @@
+<app-header></app-header>
+
+<button ng-if="game.observing()" ng-click="game.leave()">Leave</button>
+
+<hr>
+
+<game-header game="game.data"></game-header>
+
+<hr>
+
+<div class="container text-center">
+  <board-tic-tac-toe game="game.data"></board-tic-tac-toe>
+</div>
+
+<hr>

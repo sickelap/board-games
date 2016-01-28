@@ -3,18 +3,15 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
-var socket = require('socket.io')(server);
-var config = require('./config');
+var connection = require('socket.io')(server);
+var controller = require('./controller');
 
 app.use('/', express.static(__dirname + '/../client'));
 
-var store = config.getStore();
-var engine = config.getEngine();
+controller.handle(connection);
 
-engine.setSocket(socket);
-engine.setStore(store);
-engine.start();
-
-server.listen(process.env.APP_PORT || 3000);
+server.listen(process.env.APP_PORT || 3000, function() {
+  console.log('Server started!');
+});
 
 module.exports = server;

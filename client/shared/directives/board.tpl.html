@@ -1,0 +1,9 @@
+<ul class="board link-unstyled list-inline {{game.className}}"
+  ng-class="{active: game.next.id === player.id && !game.winner}">
+  <li class="cell"
+    ng-repeat="cell in game.board track by $index"
+    ng-click="onClick($index)"
+    ng-class="{'used': cell !== ' '}">
+    <img class="stone" ng-if="cell !== ' '" ng-src="/images/stones/{{cell}}.png">
+  </li>
+</ul>

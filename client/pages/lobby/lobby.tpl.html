@@ -1,0 +1,32 @@
+<app-header></app-header>
+
+<hr>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6 text-center">
+      <button class="btn btn-success btn-lg" ng-click="lobby.play('3x3')">Play 3x3</button>
+    </div>
+    <div class="col-xs-6 text-center">
+      <button class="btn btn-warning btn-lg" ng-click="lobby.play('4x4')">Play 4x4</button>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<ul>
+  <li ng-repeat="game in lobby.games">
+    <span>[{{game.type}}] </span>
+    <b>{{game.players[0].name}}</b>
+    <span ng-if="!game.players[1]">is waiting for opponent</span>
+    <span ng-if="game.players[1]">
+      v.s.
+      <b>{{game.players[1].name}}</b>
+    </span>
+    <a ng-if="game.state === 'NEW'" ui-sref="game({id: game.id})">Join</a>
+    <a ng-if="game.state === 'RUNNING'" ui-sref="game({id: game.id})">Watch</a>
+    <a ng-if="game.state === 'ENDED'" ui-sref="game({id: game.id})">Result</a>
+  </li>
+</ul>
+

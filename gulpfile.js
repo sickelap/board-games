@@ -1,30 +1,28 @@
 'use strict';
 
-var gulp = require('gulp'),
-  jshint = require('gulp-jshint'),
-  jasmine = require('gulp-jasmine');
+var gulp = require('gulp');
+var watch = require('gulp-watch');
+var gls = require('gulp-live-server');
 
-var files = {
-  client: 'client/js/**/*.js',
-  server: 'server/**/*.js',
-  specs: 'spec/**/*.spec.js'
-};
+var server = gls.new('server/app');
+var clientFiles = [
+  'client/**/*.css',
+  'client/**/*.html',
+  'client/**/*.js'
+];
+var serverFiles = [
+  'server/**/*.js'
+];
 
-gulp.task('jshint', function() {
-  var code = [].concat(files.client, files.server, files.specs);
-  return gulp.src(code)
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+gulp.task('serve', function() {
+  gulp.watch(clientFiles, function(file) {
+    server.notify.apply(server, [file]);
+  });
+  gulp.watch(serverFiles, function() {
+    server.start.bind(server)();
+  });
+
+  return server.start();
 });
 
-gulp.task('test', function() {
-  return gulp.src(files.specs).pipe(jasmine());
-});
-
-gulp.task('watch', function() {
-  var code = [].concat(files.client, files.server, files.specs);
-  return gulp.watch(code, ['jshint', 'test']);
-});
-
-gulp.task('default', ['jshint', 'test', 'watch']);
-
+gulp.task('default', ['serve']);
